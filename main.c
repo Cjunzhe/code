@@ -1,57 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+#define maxsize 1000
+
+
+typedef float datatype;
+
+typedef struct
 {
-    int a[3],i,j,t;
-    scanf("%d%d%d",&a[0],&a[1],&a[2]);
-    for(i=0;i<2;i++)
-    {
-        for(j=0;j<2-i;j++)
+    datatype data[maxsize];
+    int last;
+}SeqList;
+
+SeqList *init_seqlist()
+{
+    SeqList *L;
+    L = (SeqList*)malloc(sizeof(SeqList));
+    L->last = -1;
+    return L;
+}
+void Delete( int  i, SeqList *L )
+ {
+    int  j;
+
+    if( i < 1 || i > L->last+1 )
         {
-            if(a[j]<a[j+1])
-            {
-                t=a[j];
-                a[j]=a[j+1];
-                a[j+1]=t;
-            }
-        }
+        printf ("‰∏çÂ≠òÂú®");
+        return ;
     }
-    for(i=0;i<3;i++)
-    {
-        printf("%d",a[i]);
-    }
+
+    for ( j = i; j <= L->last; j++ )
+        L->data[j-1] = L->data[j];
+    L->last--;
+    return;
 }
 
+int insert_seqlist(SeqList *L, int i, datatype e)
+{
+    int j;
 
+    if (L->last == maxsize - 1)
+    {
+        printf("list is already full\n");
+        return -1;
+    }
 
-float power(float a[],float x,int n)
+    if (i<1 || i>L->last+2 )
+    {
+        printf("wrong position\n");
+        return -1;
+    }
+
+    for (j=L->last; j>=i-1; --j)
+    {
+        L->data[j+1] = L->data[j];
+    }
+
+    L->data[i-1] = e;
+    L->last++;
+
+    return 1;
+}
+
+void print_seqlist(SeqList *L)
 {
     int i;
-    float f=a[n];
-    for(i=n;i>0;i--)
+    for (i=1; i<L->last; ++i)
     {
-        f=a[i-1]+x*f;
+        printf("%f -> ", L->data[i-1]);
     }
-    return f;
+    printf("%f\n", L->data[L->last]);
 }
+
 int main()
 {
-    int N,i;
-    printf(" ‰»ÎN\n");
-    scanf("%d",&N);
-    float a[N+1],fx,x;
-    printf(" ‰»Îxµƒ÷µ");
-    scanf("%f",&x);
-    for(i=0;i<N+1;i++)
+    int i = 0;
+
+    SeqList* L = init_seqlist();
+    for (i=0; i<10; ++i)
     {
-        printf(" ‰»Îxµƒ%d¥Œ∑Ωµƒœµ ˝",i);
-        scanf("%f",&a[i]);
-
+        insert_seqlist(L, i+1, i*i);
     }
+    printf("list len = %d\n", L->last+1);
 
-    printf("∫Ø ˝÷µŒ™%f",power(a,x,N));
+    print_seqlist(L);
 
+    insert_seqlist(L, 5, 222);
+    print_seqlist(L);
+    Delete(22,L);
+    print_seqlist(L);
+
+    return 1;
 }
-
-// ±º‰∏¥‘”∂»O£®n£©//
